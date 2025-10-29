@@ -38,20 +38,15 @@ for idx, row in tqdm.tqdm(df.iterrows()):
 
     content_list.append({"type": "text", "text": system_prompt})
 
-    with open(f"captions_16/{row['ep_id']}.json", "r") as f:
-        captions = json.load(f)
-
     frames_dir = f"./subsampled_frames/{row['ep_id']}"                    # folder with image frames
     frame_files = sorted([f for f in os.listdir(frames_dir) if f.lower().endswith((".jpg", ".png"))])
     frames = []
 
     for frame_idx, caption in captions.items():
         frame_idx_int = int(re.search(r"(\d+)", frame_idx).group(1))
-        content_list.append({"type": "text", "text": f"[Frame {frame_idx_int}] {caption.strip()}. The image:"})
         img_path = os.path.join(frames_dir, f"frame_{frame_idx}.jpg")
         image = Image.open(img_path).convert("RGB")
-        image = image.crop((0, 80, 360, 640))
-        image = image.resize((180, 280), Image.Resampling.LANCZOS)
+        image = image.resize((180, 320), Image.Resampling.LANCZOS)
         frames.append(image)
         content_list.append({"type": "image", "image": image})
         
