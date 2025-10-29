@@ -42,8 +42,8 @@ for idx, row in tqdm.tqdm(df.iterrows()):
     frame_files = sorted([f for f in os.listdir(frames_dir) if f.lower().endswith((".jpg", ".png"))])
     frames = []
 
-    for frame_idx, caption in captions.items():
-        frame_idx_int = int(re.search(r"(\d+)", frame_idx).group(1))
+    for frame_idx in range(0, 96, 2):
+        content_list.append({"type": "text", "text": f"Frame [{frame_idx}]"})
         img_path = os.path.join(frames_dir, f"frame_{frame_idx}.jpg")
         image = Image.open(img_path).convert("RGB")
         image = image.resize((180, 320), Image.Resampling.LANCZOS)
